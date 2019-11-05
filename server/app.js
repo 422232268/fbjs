@@ -1,10 +1,3 @@
-/*
- * @Author: za-wangxuezhong
- * @Date: 2019-11-04 10:02:58
- * @LastEditors: za-wangxuezhong
- * @LastEditTime: 2019-11-04 21:02:58
- * @Description: file content
- */
 const koa = require('koa');
 const webpack = require('webpack')
 const Router = require('koa-router');
@@ -18,6 +11,8 @@ var opn = require('opn');
 var webpackDevMiddleware = require('koa-webpack-dev-middleware');
 var webpackHotMiddleware = require('koa-webpack-hot-middleware');
 var historyApiFallback = require('koa2-connect-history-api-fallback');
+var serve = require('koa-static');
+var path = require('path');
 var PORT = 3000;
 
 const app = new koa();
@@ -46,9 +41,9 @@ if (!process.env.NODE_ENV) {
 
 let koaStaticServe = process.env.DEPLOY_ENV ? {maxage: 300000} : {};
 
-app.use(serve(path.join(__dirname, config.dirname), koaStaticServe));
+app.use(serve(path.join(__dirname, '../build'), koaStaticServe));
 app.use(serve(path.join(__dirname, '../static')));
-app.use(views(path.join(__dirname, config.dirname), {'extensions': 'html'}))
+app.use(views(path.join(__dirname, '../build'), {'extensions': 'html'}))
 app.use(async(ctx)=>{
     await ctx.render('index');
 })
