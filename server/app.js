@@ -1,5 +1,12 @@
+/*
+ * @Author: za-wangxuezhong
+ * @Date: 2019-11-04 10:02:58
+ * @LastEditors: za-wangxuezhong
+ * @LastEditTime: 2019-11-06 23:15:14
+ * @Description: file content
+ */
 const koa = require('koa');
-const webpack = require('webpack')
+const webpack = require('webpack');
 const Router = require('koa-router');
 const requireDirectory = require('require-directory');
 const compress = require('koa-compress');
@@ -7,12 +14,13 @@ const views = require('koa-views');
 const session = require('koa-session');
 const bodyParser = require('koa-bodyparser');
 const devConfig = require('../webpack/webpack.dev');
+const path = require('path');
+var serve = require('koa-static');
 var opn = require('opn');
+require('colors');
 var webpackDevMiddleware = require('koa-webpack-dev-middleware');
 var webpackHotMiddleware = require('koa-webpack-hot-middleware');
 var historyApiFallback = require('koa2-connect-history-api-fallback');
-var serve = require('koa-static');
-var path = require('path');
 var PORT = 3000;
 
 const app = new koa();
@@ -26,6 +34,7 @@ app.use(session(app));
 app.use(bodyParser());
 
 if (!process.env.NODE_ENV) {
+    console.log('123');
     var compile;
     compile = webpack(devConfig);
     app.use(historyApiFallback());
@@ -41,22 +50,25 @@ if (!process.env.NODE_ENV) {
 
 let koaStaticServe = process.env.DEPLOY_ENV ? {maxage: 300000} : {};
 
-app.use(serve(path.join(__dirname, '../build'), koaStaticServe));
+app.use(serve(path.join(__dirname, './public'), koaStaticServe));
+console.log('123');
 app.use(serve(path.join(__dirname, '../static')));
-app.use(views(path.join(__dirname, '../build'), {'extensions': 'html'}))
+console.log('123');
+app.use(views(path.join(__dirname, '../public'), {'extensions': 'html'}))
 app.use(async(ctx)=>{
+    // console.log(ctx.render);
     await ctx.render('index');
 })
 router.get('/',(ctx) =>{
     ctx.status = 200;
 })
 // const modules = requireDirectory(moudel, path.resolve(__dirname, './api'), {visit: whenLoadMoudel});
-const modules = requireDirectory(module, './api', {visit:whenModuleLoad})
-function whenModuleLoad (obj) {
-    if (obj instanceof Router) {
-        app.use(obj.routes());
-    }
-}
+// const modules = requireDirectory(module, './api', {visit:whenModuleLoad})
+// function whenModuleLoad (obj) {
+//     if (obj instanceof Router) {
+//         app.use(obj.routes());
+//     }
+// }
 
 // app.use(koaStatic(Path.resolve(__dirname, '../static',)))
 // error

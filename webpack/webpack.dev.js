@@ -3,6 +3,7 @@ const webpack = require('webpack');
 // const theme = require('../theme');
 // const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+console.log('jianlaile');
 module.exports = {
     'mode': 'development',
     'devtool': 'cheap-module-eval-source-map',
