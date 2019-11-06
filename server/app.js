@@ -32,12 +32,12 @@ app.keys = ['wxz'];
 app.use(session(app));
 
 app.use(bodyParser());
-
-if (!process.env.NODE_ENV) {
-    console.log('123');
+console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV) {
+    console.log('12773');
     var compile;
     compile = webpack(devConfig);
-    app.use(historyApiFallback());
+    // app.use(historyApiFallback());historyApiFallback
     app.use(webpackDevMiddleware(compile,{
         'noInfo': true,
         'publicPath': devConfig.output.publicPath,
