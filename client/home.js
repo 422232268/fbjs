@@ -2,16 +2,17 @@
  * @Author: za-wangxuezhong
  * @Date: 2019-11-06 17:08:05
  * @LastEditors: za-wangxuezhong
- * @LastEditTime: 2019-11-07 21:51:33
+ * @LastEditTime: 2019-11-07 23:02:42
  * @Description: file content
  */
 import React from 'react';
 import axios from 'axios';
+import Test from './test'
 class App extends React.Component {
     render() {
         return (
             <div onClick={() => this.hah()}>
-                hah1221
+                <Test />
             </div>
         );
     }
