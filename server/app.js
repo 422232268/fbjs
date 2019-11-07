@@ -15,6 +15,7 @@ var session = require('koa-session');
 var path = require('path');
 var webpack = require('webpack');
 var compress = require('koa-compress');
+const requireDirectory = require('require-directory');
 require('colors');
 var opn = require('opn');
 var webpackDevMiddleware = require('koa-webpack-dev-middleware');
@@ -44,8 +45,6 @@ app.use(session(app));
 
 app.use(bodyParser());
 
-app.use(router.routes()).use(router.allowedMethods());
-
 // app.use(logger());
 console.log(!process.env.DEPLOY_ENV);
 // 开发环境启用devserver
@@ -71,16 +70,24 @@ let koaStaticServe = process.env.DEPLOY_ENV ? {maxage: 300000} : {};
 app.use(serve(path.join(__dirname, config.dirname), koaStaticServe));
 app.use(serve(path.join(__dirname, '../static')));
 
-app.use(views(path.join(__dirname, config.dirname), {
-    'extension': 'html'
-}));
+// app.use(views(path.join(__dirname, config.dirname), {
+//     'extension': 'html'
+// }));
 
 // response
-app.use(async (ctx) => {
+requireDirectory(module, './api', {visit: whenModuleLoad});
+function whenModuleLoad(obj) {
+    console.log(obj);
+    console.log(obj.allowedMethods());
+    if (obj instanceof Router) {
+        app.use(obj.routes(), obj.allowedMethods());
+    }
+}
+app.use(async(ctx) => {
     await ctx.render('index');
 });
 
-router.get('/health', function (ctx) {
+router.get('/health', function(ctx) {
     ctx.status = 200;
 });
 
@@ -92,6 +99,7 @@ router.get('/health', function (ctx) {
 // router.all(/^\/getUserInfo/, async (ctx) => {
 //     ctx.response.body = ctx.session.userInfo;
 // });
+app.use(router.routes()).use(router.allowedMethods());
 
 // error
 app.on('error', (err, ctx) => {
@@ -108,6 +116,6 @@ app.listen(PORT, () => {
     console.log(`当前环境: ${process.env.DEPLOY_ENV || 'local'}`.red);
     console.log(`\n------------------------------------------------\n\n`.rainbow);
     if (!process.env.DEPLOY_ENV) {
-        opn(`http://localhost:${PORT}`, {app: ['google chrome']});
+        // opn(`http://localhost:${PORT}`, {app: ['google chrome']});
     }
 });

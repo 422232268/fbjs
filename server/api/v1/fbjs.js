@@ -124,7 +124,7 @@ router.post('/gdxx', async(ctx, next) => {
         // todo
     }
     if (sdltgd_chart !== null) {
-        gdzb = sdltgd_chart
+        gdzb = sdltgd_chart;
     }
     if (zlcc !== null) {
         _zlcc = zlcc;
@@ -141,8 +141,8 @@ router.post('/gdxx', async(ctx, next) => {
     data._gdrs = _gdrs;
     data._sdltgd = _sdltgd;
     data._jjcg = _jjcg;
-    ctx.body = data;
-})
+    ctx.response.body = data;
+});
 
 function toStringBaiFenBi(str) {
     var num = str.split('%')[0];
