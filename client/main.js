@@ -2,12 +2,11 @@
  * @Author: za-wangxuezhong
  * @Date: 2019-11-06 17:08:05
  * @LastEditors: za-wangxuezhong
- * @LastEditTime: 2019-11-06 22:10:58
+ * @LastEditTime: 2019-11-07 20:55:05
  * @Description: file content
  */
-import react, {Component} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
+import Home from './home';
 
-import App from './App'
-console.log(App);
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Home />, document.getElementById('root'));

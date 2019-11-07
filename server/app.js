@@ -1,76 +1,98 @@
 /*
- * @Author: za-wangxuezhong
- * @Date: 2019-11-04 10:02:58
- * @LastEditors: za-wangxuezhong
- * @LastEditTime: 2019-11-06 23:15:14
- * @Description: file content
+ * @Author: za-zhouchiye
+ * @Date: 2018-07-04 12:03:46
+ * @Description: ''
+ * @Last Modified by: za-zhouchiye
+ * @Last Modified time: 2018-11-12 11:12:05
+ * @ToDo: ''
  */
-const koa = require('koa');
-const webpack = require('webpack');
-const Router = require('koa-router');
-const requireDirectory = require('require-directory');
-const compress = require('koa-compress');
-const views = require('koa-views');
-const session = require('koa-session');
-const bodyParser = require('koa-bodyparser');
-const devConfig = require('../webpack/webpack.dev');
-const path = require('path');
+var Koa = require('koa');
+var Router = require('koa-router');
+var bodyParser = require('koa-bodyparser');
 var serve = require('koa-static');
-var opn = require('opn');
+var views = require('koa-views');
+var session = require('koa-session');
+var path = require('path');
+var webpack = require('webpack');
+var compress = require('koa-compress');
 require('colors');
+var opn = require('opn');
 var webpackDevMiddleware = require('koa-webpack-dev-middleware');
 var webpackHotMiddleware = require('koa-webpack-hot-middleware');
-var historyApiFallback = require('koa2-connect-history-api-fallback');
-var PORT = 3000;
+var {historyApiFallback} = require('koa2-connect-history-api-fallback');
+// var ejs = require('ejs');
+// var logger = require('koa-logger');
+var config = require('../config');
+var conf = require('../env-config');
 
-const app = new koa();
-const router = new Router();
-const compressConfig = { threshold: 2048 };
-app.use(compress(compressConfig));
+var devConfig = require('../webpack/webpack.dev');
 
-app.keys = ['wxz'];
+// koa路由模块
+
+// 端口设置
+var PORT = 8086;
+// var PORT = conf.port || 8080;
+
+var app = new Koa();
+var router = new Router();
+
+var options = {threshold: 2048};
+app.use(compress(options));
+
+app.keys = ['some secret hurr'];
 app.use(session(app));
 
 app.use(bodyParser());
-console.log(process.env.NODE_ENV);
-if (process.env.NODE_ENV) {
-    console.log('12773');
+
+app.use(router.routes()).use(router.allowedMethods());
+
+// app.use(logger());
+console.log(!process.env.DEPLOY_ENV);
+// 开发环境启用devserver
+if (!process.env.DEPLOY_ENV) {
+    // 不同环境选用不同webpack配置
     var compile;
     compile = webpack(devConfig);
-    // app.use(historyApiFallback());historyApiFallback
-    app.use(webpackDevMiddleware(compile,{
+    app.use(historyApiFallback({enable: true}));
+    app.use(webpackDevMiddleware(compile, {
         'noInfo': true,
         'publicPath': devConfig.output.publicPath,
         'stats': {
             'colors': true
         }
     }));
+
     app.use(webpackHotMiddleware(compile));
 }
 
+// 生产环境设置强缓存,5分钟
 let koaStaticServe = process.env.DEPLOY_ENV ? {maxage: 300000} : {};
-
-app.use(serve(path.join(__dirname, './public'), koaStaticServe));
-console.log('123');
+// console.log(koaStaticServe);
+app.use(serve(path.join(__dirname, config.dirname), koaStaticServe));
 app.use(serve(path.join(__dirname, '../static')));
-console.log('123');
-app.use(views(path.join(__dirname, '../public'), {'extensions': 'html'}))
-app.use(async(ctx)=>{
-    // console.log(ctx.render);
-    await ctx.render('index');
-})
-router.get('/',(ctx) =>{
-    ctx.status = 200;
-})
-// const modules = requireDirectory(moudel, path.resolve(__dirname, './api'), {visit: whenLoadMoudel});
-// const modules = requireDirectory(module, './api', {visit:whenModuleLoad})
-// function whenModuleLoad (obj) {
-//     if (obj instanceof Router) {
-//         app.use(obj.routes());
-//     }
-// }
 
-// app.use(koaStatic(Path.resolve(__dirname, '../static',)))
+app.use(views(path.join(__dirname, config.dirname), {
+    'extension': 'html'
+}));
+
+// response
+app.use(async (ctx) => {
+    await ctx.render('index');
+});
+
+router.get('/health', function (ctx) {
+    ctx.status = 200;
+});
+
+// 校验登录
+// router.all(/^\//, login);
+
+// 接口转发
+// router.all(/^\/api/, api);
+// router.all(/^\/getUserInfo/, async (ctx) => {
+//     ctx.response.body = ctx.session.userInfo;
+// });
+
 // error
 app.on('error', (err, ctx) => {
     if (ctx.request.url !== '/__webpack_hmr' && ctx.request.url.indexOf('hot-update.json') < 0) {
@@ -89,4 +111,3 @@ app.listen(PORT, () => {
         opn(`http://localhost:${PORT}`, {app: ['google chrome']});
     }
 });
-

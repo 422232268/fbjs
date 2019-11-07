@@ -1,0 +1,36 @@
+{
+    "env": "test",
+    "port": 8080,
+    "protocol": "http://",
+    "dirname": "../build",
+    "api": {
+        "i18n": "15823-yfyb-sompo-sompo-za-graphene-i18n.test.za-tech.net",
+        "sso": "15765-yfyb-sompo-sompo-za-graphene-nsso.test.za-tech.net",
+        "mdm": "15765-yfyb-sompo-sompo-za-graphene-mdm.test.za-tech.net",
+        "mdmconfig": "15765-yfyb-sompo-sompo-za-graphene-mdm-backend.test.za-tech.net",
+        "product": "15838-yfyb-sompo-sompo-za-graphene-product-config.test.za-tech.net",
+        "formulav1": "15838-yfyb-sompo-sompo-za-graphene-calculate-config.test.za-tech.net",
+        "formulav2": "15838-yfyb-sompo-sompo-za-graphene-calculate-config.test.za-tech.net",
+        "channel": "15830-yfyb-sompo-sompo-za-graphene-channel-config.test.za-tech.net"
+    },
+    "namespace": "common,channel,channel-config,finance_front",
+    "defaultLanguage": "ja_JP",
+    "language": [
+        {
+            "key": "zh_CN",
+            "name": "简体中文"
+        },
+        {
+            "key": "zh_TW",
+            "name": "繁體中文"
+        },
+        {
+            "key": "en_US",
+            "name": "English"
+        },
+        {
+            "key": "ja_JP",
+            "name": "日本語"
+        }
+    ]
+}
