@@ -2,7 +2,7 @@
  * @Author: za-wangxuezhong
  * @Date: 2019-11-06 17:08:05
  * @LastEditors: za-wangxuezhong
- * @LastEditTime: 2019-11-07 21:22:47
+ * @LastEditTime: 2019-11-07 21:51:33
  * @Description: file content
  */
 import React from 'react';
@@ -17,11 +17,11 @@ class App extends React.Component {
     }
     async componentDidMount() {
         console.log('hah');
+    }
+    async hah() {
+        console.log('jaja');
         const result = await axios.post('./api/gdxx');
         console.log(result);
-    }
-    hah() {
-        console.log('jaja');
     }
 }
 console.log('hah');
