@@ -7,7 +7,7 @@
  */
 import React, { memo } from 'react'
 import ReactEcharts from 'echarts-for-react';
-
+import option from './data/data'
 class test extends React.Component{
     constructor (props) {
         super(props);
@@ -18,8 +18,8 @@ class test extends React.Component{
         return(
             <div>
                 <ReactEcharts
-                    option={this.getOption()}
-                    style={{height: '400px', width: '100%'}}
+                    option={option}
+                    style={{height: '400px', width: '400px'}}
                     opts={{renderer: 'svg'}}
                     className='react_for_echarts' />
             </div>
