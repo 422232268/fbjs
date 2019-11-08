@@ -3,7 +3,7 @@ const router = new Router({
     prefix: '/api'
 });
 const axios = require('axios');
-
+const lodash = require('lodash');
 router.get('/', async(ctx, next) => {
     let date = new Date().getTime();
     const count = 40;
@@ -41,6 +41,7 @@ router.post('/gdxx', async(ctx, next) => {
             // qsdgdcghj:前十大股东持股合计, qsdltgdcghj:前十大流通股东持股合计
             // rjcgje:人均持股金额, rjltg:人均流通股(股), rjltg_jsqbh:人均流通股较上期变化, rq:日期
             let temp = {};
+            temp.rq = item.rq;
             temp.gdrs = item.gdrs;
             temp.gj = item.gj;
             _gdrs.push(temp);
@@ -148,5 +149,9 @@ function toStringBaiFenBi(str) {
     var num = str.split('%')[0];
     num = +num;
     return num;
+}
+function replaceWan (str) {
+    str = str.split('万');
+    if (str)
 }
 module.exports = router;
