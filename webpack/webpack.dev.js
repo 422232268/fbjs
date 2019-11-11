@@ -45,6 +45,11 @@ module.exports = {
                 'loader': ['style-loader', 'css-loader', {
                     'loader': 'less-loader',
                     'options': {
+                        'modifyVars': {
+                            'primary-color': '#1DA57A',
+                            'link-color': '#1DA57A',
+                            'border-radius-base': '2px',
+                        },
                         'javascriptEnabled': true
                     }
                 }]
@@ -106,6 +111,6 @@ module.exports = {
         }),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
-        new webpack.NamedModulesPlugin()
+        new webpack.NamedModulesPlugin(),
     ]
 };
