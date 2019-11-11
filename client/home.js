@@ -10,6 +10,7 @@ import axios from 'axios';
 import Echarts from './echarts'
 import Table from './table'
 import option1 from './data/data1';
+import Test from './test';
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -22,6 +23,7 @@ class App extends React.Component {
             <div>
                 <Table option={this.state.option}/>
                 <Echarts option={this.state.option}/>
+                <Test />
             </div>
         );
     }

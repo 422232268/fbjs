@@ -79,6 +79,7 @@ function whenModuleLoad(obj) {
         app.use(obj.routes(), obj.allowedMethods());
     }
 }
+
 app.use(async(ctx) => {
     await ctx.render('index');
 });
