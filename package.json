@@ -12,7 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@antv/g2": "^3.5.9",
     "antd": "^3.25.0",
     "axios": "^0.19.0",
     "babel-plugin-add-module-exports": "^1.0.2",
@@ -22,6 +21,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-latest": "^6.24.1",
+    "bizcharts": "^3.5.6",
     "colors": "^1.4.0",
     "css-loader": "^3.2.0",
     "echarts": "^4.4.0",
