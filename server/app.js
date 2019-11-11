@@ -9,7 +9,7 @@
 var Koa = require('koa');
 var Router = require('koa-router');
 var bodyParser = require('koa-bodyparser');
-var serve = require('koa-static');
+var serve = require('koa-convert');
 var views = require('koa-views');
 var session = require('koa-session');
 var path = require('path');
@@ -46,7 +46,6 @@ app.use(session(app));
 app.use(bodyParser());
 
 // app.use(logger());
-console.log(!process.env.DEPLOY_ENV);
 // 开发环境启用devserver
 if (!process.env.DEPLOY_ENV) {
     // 不同环境选用不同webpack配置
@@ -66,9 +65,8 @@ if (!process.env.DEPLOY_ENV) {
 
 // 生产环境设置强缓存,5分钟
 let koaStaticServe = process.env.DEPLOY_ENV ? {maxage: 300000} : {};
-// console.log(koaStaticServe);
-app.use(serve(path.join(__dirname, config.dirname), koaStaticServe));
-app.use(serve(path.join(__dirname, '../static')));
+app.use(serve(require('koa-static')(path.join(__dirname, config.dirname)), koaStaticServe));
+app.use(serve(require('koa-static')(path.join(__dirname, '../static'))));
 
 // app.use(views(path.join(__dirname, config.dirname), {
 //     'extension': 'html'
@@ -77,12 +75,11 @@ app.use(serve(path.join(__dirname, '../static')));
 // response
 requireDirectory(module, './api', {visit: whenModuleLoad});
 function whenModuleLoad(obj) {
-    console.log(obj);
-    console.log(obj.allowedMethods());
     if (obj instanceof Router) {
         app.use(obj.routes(), obj.allowedMethods());
     }
 }
+
 app.use(async(ctx) => {
     await ctx.render('index');
 });
